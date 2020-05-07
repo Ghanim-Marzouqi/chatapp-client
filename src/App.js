@@ -5,6 +5,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
+import AppContext, { state } from "./context/AppContext";
 
 // Pages
 import Login from "./pages/Login";
@@ -13,31 +14,33 @@ import Home from "./pages/Home";
 import Chat from "./pages/Chat";
 import NotFound from "./pages/NotFound";
 
-function App() {
+const App = () => {
   return (
-    <Router>
-      <Switch>
-        <Route path="/" exact>
-          <Redirect to="/login" />
-        </Route>
-        <Route path="/login" exact>
-          <Login />
-        </Route>
-        <Route path="/register" exact>
-          <Register />
-        </Route>
-        <Route path="/home" exact>
-          <Home />
-        </Route>
-        <Route path="/chat" exact>
-          <Chat />
-        </Route>
-        <Route>
-          <NotFound />
-        </Route>
-      </Switch>
-    </Router>
+    <AppContext.Provider value={state}>
+      <Router>
+        <Switch>
+          <Route path="/" exact>
+            <Redirect to="/login" />
+          </Route>
+          <Route path="/login" exact>
+            <Login />
+          </Route>
+          <Route path="/register" exact>
+            <Register />
+          </Route>
+          <Route path="/home" exact>
+            <Home />
+          </Route>
+          <Route path="/chat" exact>
+            <Chat />
+          </Route>
+          <Route>
+            <NotFound />
+          </Route>
+        </Switch>
+      </Router>
+    </AppContext.Provider>
   );
-}
+};
 
 export default App;

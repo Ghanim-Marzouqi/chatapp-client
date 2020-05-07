@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import "./Login.css";
 import { Link, useHistory } from "react-router-dom";
 import Logo from "../../assets/images/chatapp_logo.jpg";
 import StyledForm from "../../components/styled/StyledForm";
 import { AUTHENTICATE_USER } from "../../services/HttpService";
+import { userReducer } from "../../context/AppContext";
 
 const Login = () => {
   // Page State
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
+  const [, dispatch] = useReducer(userReducer, {});
 
   // Browser History
   const history = useHistory();
@@ -20,9 +22,10 @@ const Login = () => {
     if (username !== "") {
       let result = await AUTHENTICATE_USER({ username });
 
-      let { statusCode, message } = result;
+      let { statusCode, message, user } = result;
 
       if (statusCode === 200) {
+        dispatch({ type: "SET_USER", user });
         history.push("/home");
       } else {
         // Display Error
