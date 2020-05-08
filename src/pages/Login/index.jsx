@@ -5,7 +5,14 @@ import Logo from "../../assets/images/chatapp_logo.png";
 import Copyright from "../../components/Copyright";
 
 // Material UI Components And Icons
-import { Container, TextField, Button, Link, Box } from "@material-ui/core";
+import {
+  Container,
+  TextField,
+  Button,
+  Link,
+  Box,
+  Typography,
+} from "@material-ui/core";
 
 // Validation Schema
 import { loginValidationSchema } from "../../services/ValidationService";
@@ -25,21 +32,16 @@ const Login = () => {
 
   // Page State
   const [username, setUsername] = useState("");
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [, dispatch] = useReducer(userReducer, {});
 
-  // Methods
-  const onInvalidForm = (e) => {
-    e.preventDefault();
-    setError("Please Enter Username");
-  };
-
   const authenticateUser = async (e) => {
+    // Set Defaults
     e.preventDefault();
-    setError("");
+    setErrorMessage("");
 
     try {
-      // Check If Input Is Valid
+      // Validate User Input
       await loginValidationSchema.validate({ username });
 
       // Send Http Request
@@ -52,14 +54,15 @@ const Login = () => {
         dispatch({ type: "SET_USER", user });
         history.push("/home");
       } else {
-        setError(message);
+        setErrorMessage(message);
       }
     } catch (error) {
       // Check Error Type
       if (error.name === "ValidationError") {
-        setError(error.message);
+        setErrorMessage(error.message);
+      } else {
+        console.log("Authentication Error", error);
       }
-      console.log("Authentication Error", error);
     }
   };
 
@@ -67,11 +70,14 @@ const Login = () => {
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
         <img src={Logo} alt="Logo" width="250px" height="auto" />
-        <form
-          className={classes.form}
-          onSubmit={authenticateUser}
-          onInvalid={onInvalidForm}
-        >
+        <form className={classes.form} onSubmit={authenticateUser} noValidate>
+          {errorMessage === "" ? (
+            ""
+          ) : (
+            <Typography variant="body1" style={{ color: "red" }}>
+              {errorMessage}
+            </Typography>
+          )}
           <TextField
             variant="outlined"
             margin="normal"
@@ -81,8 +87,6 @@ const Login = () => {
             id="username"
             label="Username"
             onChange={(e) => setUsername(e.target.value)}
-            error={error === "" ? false : true}
-            helperText={error === "" ? "" : error}
           />
           <Button
             type="submit"
