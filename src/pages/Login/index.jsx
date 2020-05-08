@@ -1,61 +1,109 @@
 import React, { useState, useReducer } from "react";
-import "./Login.css";
-import { Link, useHistory } from "react-router-dom";
-import Logo from "../../assets/images/chatapp_logo.jpg";
-import StyledForm from "../../components/styled/StyledForm";
+import { useStyles } from "./LoginStyle";
+import { useHistory } from "react-router-dom";
+import Logo from "../../assets/images/chatapp_logo.png";
+import Copyright from "../../components/Copyright";
+
+// Material UI Components And Icons
+import { Container, TextField, Button, Link, Box } from "@material-ui/core";
+
+// Validation Schema
+import { loginValidationSchema } from "../../services/ValidationService";
+
+// Http Service Methods
 import { AUTHENTICATE_USER } from "../../services/HttpService";
+
+// Application Context
 import { userReducer } from "../../context/AppContext";
 
 const Login = () => {
+  // Page Style Classes
+  const classes = useStyles();
+
+  // Browser History
+  const history = useHistory();
+
   // Page State
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
   const [, dispatch] = useReducer(userReducer, {});
 
-  // Browser History
-  const history = useHistory();
+  // Methods
+  const onInvalidForm = (e) => {
+    e.preventDefault();
+    setError("Please Enter Username");
+  };
 
   const authenticateUser = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (username !== "") {
-      let result = await AUTHENTICATE_USER({ username });
+    try {
+      // Check If Input Is Valid
+      await loginValidationSchema.validate({ username });
 
-      let { statusCode, message, user } = result;
+      // Send Http Request
+      let response = await AUTHENTICATE_USER({ username });
+
+      // Get Response
+      let { statusCode, message, user } = response;
 
       if (statusCode === 200) {
         dispatch({ type: "SET_USER", user });
         history.push("/home");
       } else {
-        // Display Error
         setError(message);
       }
-    } else {
-      console.log("Please Enter Username");
+    } catch (error) {
+      // Check Error Type
+      if (error.name === "ValidationError") {
+        setError(error.message);
+      }
+      console.log("Authentication Error", error);
     }
   };
 
   return (
-    <StyledForm>
-      <form>
-        <img src={Logo} alt="Logo" />
-        <label htmlFor="error" style={{ color: "red" }}>
-          {error}
-        </label>
-        <input
-          type="text"
-          placeholder="Username"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <div className="flex justify-between">
-          <button onClick={authenticateUser}>Sign In</button>
-          <Link className="font-bold text-blue-500 p-2" to="/register">
-            Sign Up
-          </Link>
-        </div>
-      </form>
-    </StyledForm>
+    <Container component="main" maxWidth="xs">
+      <div className={classes.paper}>
+        <img src={Logo} alt="Logo" width="250px" height="auto" />
+        <form
+          className={classes.form}
+          onSubmit={authenticateUser}
+          onInvalid={onInvalidForm}
+        >
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            autoFocus
+            id="username"
+            label="Username"
+            onChange={(e) => setUsername(e.target.value)}
+            error={error === "" ? false : true}
+            helperText={error === "" ? "" : error}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Sign In
+          </Button>
+          <Box mt={2} className={classes.link}>
+            <Link variant="body2" onClick={() => history.push("/register")}>
+              {"Don't have an account? Sign Up"}
+            </Link>
+          </Box>
+        </form>
+      </div>
+      <Box mt={4}>
+        <Copyright websiteLink="https://www.google.com" />
+      </Box>
+    </Container>
   );
 };
 

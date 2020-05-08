@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./Register.css";
 import { Link } from "react-router-dom";
 import Logo from "../../assets/images/chatapp_logo.jpg";
-import StyledForm from "../../components/styled/StyledForm";
 import { CREATE_USER } from "../../services/HttpService";
 
 const Register = () => {
@@ -42,8 +41,9 @@ const Register = () => {
       console.log("Please Fill All Fields");
     }
   };
+
   return (
-    <StyledForm>
+    <div>
       <form>
         <img src={Logo} alt="Logo" />
         <label htmlFor="response" style={labelStyle}>
@@ -69,14 +69,12 @@ const Register = () => {
           placeholder="Username"
           onChange={(e) => setUsername(e.target.value)}
         />
-        <div className="flex justify-between">
+        <div>
           <button onClick={createUser}>Sign Up</button>
-          <Link className="font-bold text-blue-500 p-2" to="/login">
-            Already Registered?
-          </Link>
+          <Link to="/login">Already Registered?</Link>
         </div>
       </form>
-    </StyledForm>
+    </div>
   );
 };
 

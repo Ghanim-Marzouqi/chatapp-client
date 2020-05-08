@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./assets/main.css";
+// Load Roboto Font For Material UI
+import "typeface-roboto";
 import App from "./App";
 
 ReactDOM.render(

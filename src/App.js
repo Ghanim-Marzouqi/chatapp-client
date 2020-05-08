@@ -7,6 +7,9 @@ import {
 } from "react-router-dom";
 import AppContext, { state } from "./context/AppContext";
 
+// This Fixes Some Inconsistencies Across Browsers And Devices
+import CssBaseline from "@material-ui/core/CssBaseline";
+
 // Pages
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -17,6 +20,7 @@ import NotFound from "./pages/NotFound";
 const App = () => {
   return (
     <AppContext.Provider value={state}>
+      <CssBaseline />
       <Router>
         <Switch>
           <Route path="/" exact>

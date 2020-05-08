@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./Home.css";
 import AppContext from "../../context/AppContext";
-import StyledPage from "../../components/styled/StyledPage";
 
 const Home = () => {
   // Subscribe To Application Context
@@ -16,10 +15,10 @@ const Home = () => {
   }, [state.user]);
 
   return (
-    <StyledPage>
-      <h1 className="text-3xl font-bold m-6">Messages</h1>
+    <div>
+      <h1>Messages</h1>
       <p>User Name: {user.name}</p>
-    </StyledPage>
+    </div>
   );
 };
 
