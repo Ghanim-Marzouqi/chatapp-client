@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { useStyles } from "./HomeStyle";
+import moment from "moment";
 
 // Application Context
 import AppContext from "../../context/AppContext";
+
+// Http Service Methods
+import { FETCH_USERS } from "../../services/HttpService";
 
 // Custom Components
 import SearchBar from "../../components/SearchBar";
@@ -17,49 +22,87 @@ import AvatarOne from "../../assets/images/avatar/avatar_1.jpg";
 import AvatarTwo from "../../assets/images/avatar/avatar_2.jpg";
 import AvatarThree from "../../assets/images/avatar/avatar_3.jpg";
 import AvatarFour from "../../assets/images/avatar/avatar_4.jpg";
+import AvatarFive from "../../assets/images/avatar/avatar_5.jpg";
+import AvatarSix from "../../assets/images/avatar/avatar_6.jpg";
 
 const Home = () => {
   // Page Style Classes
   const classes = useStyles();
 
-  // Subscribe To Application Context
-  const state = useContext(AppContext);
-  const [user, setUser] = useState(state.user);
+  // Application Context
+  const context = useContext(AppContext);
 
-  // Load User If State Lost
+  // Browser History
+  const history = useHistory();
+
+  // Page State
+  const [usersList, setUserList] = useState([]);
+
+  // List Of Avatars
+  const avatarList = [
+    AvatarOne,
+    AvatarTwo,
+    AvatarThree,
+    AvatarFour,
+    AvatarFive,
+    AvatarSix,
+  ];
+
+  // Run When Page Loads
   useEffect(() => {
-    if (state.user.username === "") {
-      setUser(JSON.parse(sessionStorage.getItem("loggedUser")));
+    // Fetch Users
+    const fetchUsers = async (user) => {
+      try {
+        let response = await FETCH_USERS(user);
+        let { statusCode, message, users } = response;
+
+        if (statusCode === 200) {
+          setUserList(users);
+        } else {
+          alert(message);
+        }
+      } catch (error) {
+        console.log("fetchUsers ERROR", error);
+      }
+    };
+
+    // Get Logged User
+    if (context.user.id !== 0) {
+      fetchUsers(context.user);
+    } else {
+      history.goBack();
     }
-  }, [state.user]);
+
+    // Call Fetch Users Method
+  }, [context.user, history]);
+
+  // Get User Conversations
+  const getUserConversations = () => {
+    if (usersList.length > 0) {
+      return usersList.map((user, i) => (
+        <ConversationItem
+          key={i}
+          avatar={avatarList[Math.floor(Math.random() * 6)]}
+          id={user.id}
+          name={user.name}
+          date={moment(user.createdAt).format("YYYY-MM-DD hh:mm a")}
+        />
+      ));
+    } else {
+      return [];
+    }
+  };
 
   return (
     <Container maxWidth="lg" component="main" className={classes.body}>
-      <SearchBar classes={classes} />
-      <Typography variant="h4" style={{ margin: "5px" }}>
-        Messages
-      </Typography>
-      <List>
-        <ConversationItem
-          avatarImage={AvatarOne}
-          userName={"Ghanim Al Marzouqi"}
-          messageText={"Hi, how are you?"}
-        />
-        <ConversationItem
-          avatarImage={AvatarTwo}
-          userName={"Ohoud Al Shabibi"}
-          messageText={"Where are going now?"}
-        />
-        <ConversationItem
-          avatarImage={AvatarThree}
-          userName={"Mohammed Al Marzouqi"}
-          messageText={"I want some candy!"}
-        />
-        <ConversationItem
-          avatarImage={AvatarFour}
-          userName={"Abdulaziz Mohammed"}
-          messageText={"Are we going to meet today?!"}
-        />
+      <Box className={classes.searchBar}>
+        <SearchBar classes={classes} />
+        <Typography variant="h4" style={{ margin: "5px" }}>
+          Messages
+        </Typography>
+      </Box>
+      <List component="nav" className={classes.list}>
+        {getUserConversations()}
       </List>
       <Box className={classes.footer}>
         <BottomTabNavigation />

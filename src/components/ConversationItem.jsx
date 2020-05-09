@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 // Material UI Components & Icons
 import {
@@ -9,14 +10,17 @@ import {
   Divider,
 } from "@material-ui/core";
 
-const ConversationItem = ({ avatarImage, userName, messageText }) => {
+const ConversationItem = ({ avatar, id, name, date }) => {
+  // Browser History
+  const history = useHistory();
+
   return (
     <div>
-      <ListItem>
+      <ListItem button onClick={() => history.push(`/chat/${id}`)}>
         <ListItemAvatar>
-          <Avatar src={avatarImage} alt="Avatar" />
+          <Avatar src={avatar} alt="Avatar" />
         </ListItemAvatar>
-        <ListItemText primary={userName} secondary={messageText} />
+        <ListItemText primary={name} secondary={date} />
       </ListItem>
       <Divider />
     </div>

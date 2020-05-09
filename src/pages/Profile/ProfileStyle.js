@@ -5,35 +5,19 @@ export const useStyles = makeStyles((theme) => ({
     height: "100%",
     display: "flex",
   },
-  searchBar: {
+  title: {
     position: "fixed",
     zIndex: 1,
-    backgroundColor: "#fafafa",
+    backgroundColor: theme.palette.background.paper,
     width: "100%",
     padding: "0px 10px",
     left: "5px",
     right: "5px",
+    marginTop: "10px",
   },
   list: {
-    position: "absolute",
-    top: "120px",
-    left: 0,
-    marginBottom: "50px",
     width: "100%",
-  },
-  paper: {
-    padding: "2px 4px",
-    display: "flex",
-    alignItems: "center",
-    marginTop: "20px",
-  },
-  input: {
-    marginLeft: theme.spacing(1),
-    flex: 1,
-  },
-  tab: {
-    flexGrow: 1,
-    width: "100%",
+    maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
   },
   footer: {

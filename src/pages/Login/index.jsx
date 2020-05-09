@@ -21,7 +21,7 @@ import { loginValidationSchema } from "../../services/ValidationService";
 import { AUTHENTICATE_USER } from "../../services/HttpService";
 
 // Application Context
-import { userReducer } from "../../context/AppContext";
+import { reducer } from "../../context/AppContext";
 
 const Login = () => {
   // Page Style Classes
@@ -33,7 +33,7 @@ const Login = () => {
   // Page State
   const [username, setUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [, dispatch] = useReducer(userReducer, {});
+  const [, dispatch] = useReducer(reducer, {});
 
   const authenticateUser = async (e) => {
     // Set Defaults
