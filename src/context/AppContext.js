@@ -8,8 +8,18 @@ export const state = {
     email: "",
     phone: "",
     username: "",
+    avatarUrl: "https://via.placeholder.com/24/008000/008000.png",
   },
   bottomTabValue: 0,
+  receiver: {
+    id: 0,
+    name: "",
+    email: "",
+    phone: "",
+    username: "",
+    avatarUrl: "https://via.placeholder.com/24/008000/008000.png",
+  },
+  messages: [],
 };
 
 // Application Context
@@ -22,6 +32,12 @@ export const reducer = (state, action) => {
       return setUser(action.user);
     case "SET_BOTTOM_NAVIGATION_VALUE":
       return setBottomNavigationTab(action.bottomTabValue);
+    case "SET_RECEIVER":
+      return setReceiver(action.receiver);
+    case "SET_MESSAGES":
+      return setMessages(action.messages);
+    case "ADD_MESSAGE":
+      return addNewMessage(action.message);
     default:
       throw new Error();
   }
@@ -33,8 +49,22 @@ const setUser = (user) => {
   sessionStorage.setItem("loggedUser", JSON.stringify(user));
 };
 
+const setReceiver = (receiver) => {
+  state.receiver = receiver;
+};
+
 const setBottomNavigationTab = (tabValue) => {
   state.bottomTabValue = tabValue;
+};
+
+const setMessages = (messages) => {
+  state.messages = messages;
+  console.log("messages state", state.messages);
+};
+
+const addNewMessage = (message) => {
+  state.messages.push(message);
+  console.log("messages state", state.messages);
 };
 
 export default AppContext;

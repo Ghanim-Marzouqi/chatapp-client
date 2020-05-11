@@ -83,8 +83,7 @@ const Home = () => {
         <ConversationItem
           key={i}
           avatar={avatarList[Math.floor(Math.random() * 6)]}
-          id={user.id}
-          name={user.name}
+          user={user}
           date={moment(user.createdAt).format("YYYY-MM-DD hh:mm a")}
         />
       ));
@@ -96,10 +95,10 @@ const Home = () => {
   return (
     <Container maxWidth="lg" component="main" className={classes.body}>
       <Box className={classes.searchBar}>
-        <SearchBar classes={classes} />
         <Typography variant="h4" style={{ margin: "5px" }}>
           Messages
         </Typography>
+        <SearchBar classes={classes} />
       </Box>
       <List component="nav" className={classes.list}>
         {getUserConversations()}

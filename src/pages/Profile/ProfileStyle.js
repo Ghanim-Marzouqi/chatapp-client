@@ -8,7 +8,7 @@ export const useStyles = makeStyles((theme) => ({
   title: {
     position: "fixed",
     zIndex: 1,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#fafafa",
     width: "100%",
     padding: "0px 10px",
     left: "5px",
@@ -18,7 +18,7 @@ export const useStyles = makeStyles((theme) => ({
   list: {
     width: "100%",
     maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#fafafa",
   },
   footer: {
     position: "fixed",

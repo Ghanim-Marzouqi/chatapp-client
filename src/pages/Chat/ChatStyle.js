@@ -3,21 +3,20 @@ import { makeStyles } from "@material-ui/core/styles";
 export const useStyles = makeStyles((theme) => ({
   body: {
     height: "100%",
+    margin: 5,
+    position: "relative",
     display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  title: {
+  header: {
+    padding: 10,
     position: "fixed",
-    zIndex: 1,
-    backgroundColor: "#fafafa",
-    width: "100%",
-    padding: "0px 10px",
-    left: "5px",
-    right: "5px",
+    top: 0,
   },
-  footer: {
+  chat: {
     position: "fixed",
-    width: "100%",
-    bottom: 0,
-    left: 0,
+    top: 68,
+    bottom: 5,
   },
 }));

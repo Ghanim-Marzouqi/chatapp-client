@@ -8,11 +8,14 @@ export const useStyles = makeStyles((theme) => ({
   searchBar: {
     position: "fixed",
     zIndex: 1,
+    display: "flex",
+    flexDirection: "column",
     backgroundColor: "#fafafa",
     width: "100%",
     padding: "0px 10px",
     left: "5px",
     right: "5px",
+    marginTop: "10px",
   },
   list: {
     position: "absolute",
@@ -22,10 +25,12 @@ export const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   paper: {
-    padding: "2px 4px",
+    alignSelf: "center",
     display: "flex",
     alignItems: "center",
     marginTop: "20px",
+    marginRight: "10px",
+    width: "100%",
   },
   input: {
     marginLeft: theme.spacing(1),

@@ -63,7 +63,7 @@ const App = () => {
             <Route path="/settings" exact>
               <Settings />
             </Route>
-            <Route path="/chat/:id" exact>
+            <Route path="/chat" exact>
               <Chat />
             </Route>
             <Route>
