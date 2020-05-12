@@ -25,16 +25,17 @@ const Profile = () => {
   const classes = useStyles();
 
   // Application Context
-  const context = useContext(AppContext);
+  const { user } = useContext(AppContext);
 
   // Browser History
   const history = useHistory();
 
+  // Run When Page Loaded
   useEffect(() => {
-    if (context.user.id === 0) {
+    if (user.id === 0) {
       history.goBack();
     }
-  }, [context.user.id, history]);
+  }, [user.id, history]);
 
   return (
     <Container maxWidth="lg" component="main" className={classes.body}>
@@ -47,25 +48,25 @@ const Profile = () => {
             <ListItemIcon>
               <Person />
             </ListItemIcon>
-            <ListItemText primary={context.user.name} />
+            <ListItemText primary={user.name} />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <Email />
             </ListItemIcon>
-            <ListItemText primary={context.user.email} />
+            <ListItemText primary={user.email} />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <Phone />
             </ListItemIcon>
-            <ListItemText primary={`+968 ${context.user.phone}`} />
+            <ListItemText primary={`+968 ${user.phone}`} />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <AccountCircle />
             </ListItemIcon>
-            <ListItemText primary={context.user.username} />
+            <ListItemText primary={user.username} />
           </ListItem>
         </List>
       </Box>

@@ -1,6 +1,8 @@
 import React, { useState, useReducer } from "react";
 import { useStyles } from "./LoginStyle";
 import { useHistory } from "react-router-dom";
+
+// Custom Components
 import Logo from "../../assets/images/chatapp_logo.png";
 import Copyright from "../../components/Copyright";
 
@@ -20,7 +22,7 @@ import { loginValidationSchema } from "../../services/ValidationService";
 // Http Service Methods
 import { AUTHENTICATE_USER } from "../../services/HttpService";
 
-// Application Context
+// Reducer Function
 import { reducer } from "../../context/AppContext";
 
 const Login = () => {

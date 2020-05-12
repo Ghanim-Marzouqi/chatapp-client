@@ -8,7 +8,6 @@ export const state = {
     email: "",
     phone: "",
     username: "",
-    avatarUrl: "https://via.placeholder.com/24/008000/008000.png",
   },
   bottomTabValue: 0,
   receiver: {
@@ -17,7 +16,6 @@ export const state = {
     email: "",
     phone: "",
     username: "",
-    avatarUrl: "https://via.placeholder.com/24/008000/008000.png",
   },
   messages: [],
 };
@@ -58,13 +56,12 @@ const setBottomNavigationTab = (tabValue) => {
 };
 
 const setMessages = (messages) => {
-  state.messages = messages;
-  console.log("messages state", state.messages);
+  return (state.messages = messages);
 };
 
 const addNewMessage = (message) => {
   state.messages.push(message);
-  console.log("messages state", state.messages);
+  return state.messages;
 };
 
 export default AppContext;

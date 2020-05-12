@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useStyles } from "./RegisterStyle";
 import { useHistory } from "react-router-dom";
+
+// Custom Components
 import Copyright from "../../components/Copyright";
 
-// Material UI Components And Icons
+// Material UI Components
 import {
   Container,
   Typography,

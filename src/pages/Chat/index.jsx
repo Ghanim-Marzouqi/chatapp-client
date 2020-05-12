@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext, useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import { useStyles } from "./ChatStyle";
 
@@ -6,7 +6,13 @@ import { useStyles } from "./ChatStyle";
 import ChatBubble from "react-chat-bubble";
 
 // Application Context
-import AppContext from "../../context/AppContext";
+import AppContext, { reducer } from "../../context/AppContext";
+
+// Http Service Methods
+import {
+  FETCH_CONVERSATIONS,
+  CREATE_CONVERSATION,
+} from "../../services/HttpService";
 
 // Material UI Components & Icons
 import { Container, Box, Typography, IconButton } from "@material-ui/core";
@@ -20,21 +26,14 @@ const Chat = () => {
   const history = useHistory();
 
   // App Context
-  const { user, receiver } = useContext(AppContext);
+  const { user, receiver, messages } = useContext(AppContext);
 
-  // Page State
-  const [messages, setMessages] = useState([
-    {
-      type: 0,
-      image: require("../../assets/images/avatar/avatar_1.jpg"),
-      text: "Hello! Good Morning!",
-    },
-    {
-      type: 1,
-      image: require("../../assets/images/avatar/avatar_2.jpg"),
-      text: "Hello! Good Afternoon!",
-    },
-  ]);
+  // Reducer
+  const [state, dispatch] = useReducer(reducer, []);
+
+  // Avatar Placeholder Image
+  const avatar_1 = require("../../assets/images/avatar/avatar_1.jpg");
+  const avatar_2 = require("../../assets/images/avatar/avatar_2.jpg");
 
   // Run When Page Loads
   useEffect(() => {
@@ -44,18 +43,64 @@ const Chat = () => {
     } else if (receiver.id === 0) {
       history.goBack();
     }
-  }, [user.id, receiver.id, history]);
+
+    // Fetch Chat Messages
+    const fetchConversations = async () => {
+      try {
+        // Make Http POST Request
+        let response = await FETCH_CONVERSATIONS({
+          senderId: user.id,
+          receiverId: receiver.id,
+        });
+
+        // Get Results
+        let { statusCode, message, conversations } = response;
+
+        if (statusCode === 200) {
+          let newConArr = conversations.map((con) => ({
+            type: con.sender.id === user.id ? 0 : 1,
+            image: con.sender.id === user.id ? avatar_1 : avatar_2,
+            text: con.messageText,
+          }));
+          dispatch({ type: "SET_MESSAGES", messages: newConArr });
+        } else {
+          alert(message);
+        }
+      } catch (error) {
+        console.log("fetchConversations ERROR", error);
+      }
+    };
+
+    // Call Fetch Conversations
+    fetchConversations();
+  }, [user.id, receiver.id, history, avatar_1, avatar_2]);
 
   // Handle New Message
-  const handleNewMessage = (text) => {
-    setMessages([
-      ...messages,
-      {
-        type: 0,
-        text,
-        image: require("../../assets/images/avatar/avatar_1.jpg"),
-      },
-    ]);
+  const handleNewMessage = async (text) => {
+    // Make Http POST Request
+    let response = await CREATE_CONVERSATION({
+      message: text,
+      senderId: user.id,
+      receiverId: receiver.id,
+    });
+
+    // Get Response
+    let { statusCode, message } = response;
+
+    console.log("statusCode", statusCode);
+
+    if (statusCode === 201) {
+      setNewMessage({ type: 0, image: avatar_1, text });
+    } else {
+      alert(message);
+    }
+
+    console.log("state", state);
+    console.log("messages", messages);
+  };
+
+  const setNewMessage = (message) => {
+    dispatch({ type: "ADD_MESSAGE", message });
   };
 
   return (

@@ -39,7 +39,7 @@ const Settings = () => {
   // Reducer
   const [, dispatch] = useReducer(reducer, 0);
 
-  // Select Component Style
+  // Component Select Style
   const BootstrapInput = withStyles((theme) => ({
     root: {
       "label + &": {

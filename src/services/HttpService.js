@@ -47,4 +47,22 @@ const FETCH_CONVERSATIONS = async (payload) => {
   return response.data;
 };
 
-export { AUTHENTICATE_USER, CREATE_USER, FETCH_USERS, FETCH_CONVERSATIONS };
+const CREATE_CONVERSATION = async (payload) => {
+  // Make Http POST Request
+  let response = await axios.post(`${BASE_URL}/conversations/create`, {
+    message: payload.message,
+    senderId: payload.senderId,
+    receiverId: payload.receiverId,
+  });
+
+  // Return Result
+  return response.data;
+};
+
+export {
+  AUTHENTICATE_USER,
+  CREATE_USER,
+  FETCH_USERS,
+  FETCH_CONVERSATIONS,
+  CREATE_CONVERSATION,
+};

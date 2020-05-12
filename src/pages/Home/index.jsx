@@ -30,7 +30,7 @@ const Home = () => {
   const classes = useStyles();
 
   // Application Context
-  const context = useContext(AppContext);
+  const { user } = useContext(AppContext);
 
   // Browser History
   const history = useHistory();
@@ -51,7 +51,7 @@ const Home = () => {
   // Run When Page Loads
   useEffect(() => {
     // Fetch Users
-    const fetchUsers = async (user) => {
+    const fetchUsers = async () => {
       try {
         let response = await FETCH_USERS(user);
         let { statusCode, message, users } = response;
@@ -67,14 +67,14 @@ const Home = () => {
     };
 
     // Get Logged User
-    if (context.user.id !== 0) {
-      fetchUsers(context.user);
+    if (user.id !== 0) {
+      fetchUsers(user);
     } else {
       history.goBack();
     }
 
     // Call Fetch Users Method
-  }, [context.user, history]);
+  }, [user, history]);
 
   // Get User Conversations
   const getUserConversations = () => {
