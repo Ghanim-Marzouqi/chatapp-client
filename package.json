@@ -19,6 +19,7 @@
     "marked": "^1.0.0",
     "moment": "^2.25.3",
     "react": "^16.13.1",
+    "react-chat-bubble": "^0.8.7",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",

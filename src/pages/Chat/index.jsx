@@ -1,109 +1,78 @@
-import React, { useEffect, useContext, useReducer } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import { useStyles } from "./ChatStyle";
 
+// Chat Bubble Component
+import ChatBubble from "react-chat-bubble";
+
 // Application Context
-import AppContext, { reducer } from "../../context/AppContext";
-
-// Http Service Functions
-import { FETCH_CONVERSATIONS } from "../../services/HttpService";
-
-// KendoReact Conversational UI Components
-import "@progress/kendo-theme-default/dist/all.css";
-import { Chat as ChatScreen } from "@progress/kendo-react-conversational-ui";
+import AppContext from "../../context/AppContext";
 
 // Material UI Components & Icons
-import { Grid, Typography, IconButton } from "@material-ui/core";
+import { Container, Box, Typography, IconButton } from "@material-ui/core";
 import { ArrowBack, InfoOutlined } from "@material-ui/icons";
 
 const Chat = () => {
-  // Page Styles
+  // Page Style
   const classes = useStyles();
 
-  // Browser History & History Parameters
+  // Browser History
   const history = useHistory();
 
   // App Context
-  const { user, receiver, messages } = useContext(AppContext);
+  const { user, receiver } = useContext(AppContext);
 
-  console.log("messages", messages);
-
-  // Reducer
-  const [state, dispatch] = useReducer(reducer, [
+  // Page State
+  const [messages, setMessages] = useState([
     {
-      text: "Hello",
-      auther: {
-        id: 1,
-        name: "Ghanim",
-        avatarUrl: (
-          <img src="https://via.placeholder.com/24/008000/008000.png" alt="" />
-        ),
-      },
+      type: 0,
+      image: require("../../assets/images/avatar/avatar_1.jpg"),
+      text: "Hello! Good Morning!",
+    },
+    {
+      type: 1,
+      image: require("../../assets/images/avatar/avatar_2.jpg"),
+      text: "Hello! Good Afternoon!",
     },
   ]);
-
-  console.log("state", state);
 
   // Run When Page Loads
   useEffect(() => {
     if (user.id === 0) {
+      // Go To Root Route (Login Page)
       history.go(-(history.length - 1));
-    } else {
-      const fetchConversations = async () => {
-        try {
-          let response = await FETCH_CONVERSATIONS({
-            senderId: user.id,
-            receiverId: receiver.id,
-          });
-
-          const { statusCode, message, conversations } = response;
-
-          if (statusCode === 200) {
-            // dispatch({ type: "SET_MESSAGES", messages: conversations });
-          } else {
-            alert(message);
-          }
-        } catch (error) {
-          console.log("fetchConversations", error);
-        }
-      };
-
-      // Call Fetch Function
-      fetchConversations();
+    } else if (receiver.id === 0) {
+      history.goBack();
     }
-  }, [user.id, receiver.id, history, messages]);
+  }, [user.id, receiver.id, history]);
 
-  // Methods
-  const onMessageSend = (e) => {
-    console.log("message", e.message);
-    dispatch({ type: "SET_MESSAGES", message: e.message });
+  // Handle New Message
+  const handleNewMessage = (text) => {
+    setMessages([
+      ...messages,
+      {
+        type: 0,
+        text,
+        image: require("../../assets/images/avatar/avatar_1.jpg"),
+      },
+    ]);
   };
 
   return (
-    <Grid container direction="column" justify="center" alignItems="center">
-      <Grid
-        container
-        direction="row"
-        justify="space-between"
-        alignItems="center"
-      >
+    <Container maxWidth="lg" component="main" className={classes.body}>
+      <Box className={classes.header}>
         <IconButton onClick={() => history.goBack()}>
           <ArrowBack />
         </IconButton>
         <Typography variant="h5">{receiver.name}</Typography>
-        <IconButton>
+        <IconButton onClick={() => alert(`${receiver.name} chat`)}>
           <InfoOutlined />
         </IconButton>
-      </Grid>
-
-      <ChatScreen
-        user={user}
-        messages={state}
-        onMessageSend={onMessageSend}
-        placeholder={"Type a message..."}
-        width={"100%"}
-      />
-    </Grid>
+      </Box>
+      <Box height="75%" className={classes.chat}>
+        <ChatBubble messages={messages} onNewMessage={handleNewMessage} />
+      </Box>
+    </Container>
   );
 };
 
