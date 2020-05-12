@@ -18,6 +18,7 @@ export const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    cursor: "pointer",
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
