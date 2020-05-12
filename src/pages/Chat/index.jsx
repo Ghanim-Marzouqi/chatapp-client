@@ -26,7 +26,7 @@ const Chat = () => {
   const history = useHistory();
 
   // App Context
-  const { user, receiver, messages } = useContext(AppContext);
+  const { user, receiver } = useContext(AppContext);
 
   // Reducer
   const [state, dispatch] = useReducer(reducer, []);
@@ -37,13 +37,6 @@ const Chat = () => {
 
   // Run When Page Loads
   useEffect(() => {
-    if (user.id === 0) {
-      // Go To Root Route (Login Page)
-      history.go(-(history.length - 1));
-    } else if (receiver.id === 0) {
-      history.goBack();
-    }
-
     // Fetch Chat Messages
     const fetchConversations = async () => {
       try {
@@ -71,8 +64,15 @@ const Chat = () => {
       }
     };
 
-    // Call Fetch Conversations
-    fetchConversations();
+    if (user.id === 0) {
+      // Go To Root Route (Login Page)
+      history.go(-(history.length - 1));
+    } else if (receiver.id === 0) {
+      history.goBack();
+    } else {
+      // Call Fetch Conversations
+      fetchConversations();
+    }
   }, [user.id, receiver.id, history, avatar_1, avatar_2]);
 
   // Handle New Message
@@ -94,9 +94,6 @@ const Chat = () => {
     } else {
       alert(message);
     }
-
-    console.log("state", state);
-    console.log("messages", messages);
   };
 
   const setNewMessage = (message) => {
@@ -115,7 +112,7 @@ const Chat = () => {
         </IconButton>
       </Box>
       <Box height="75%" className={classes.chat}>
-        <ChatBubble messages={messages} onNewMessage={handleNewMessage} />
+        <ChatBubble messages={state} onNewMessage={handleNewMessage} />
       </Box>
     </Container>
   );

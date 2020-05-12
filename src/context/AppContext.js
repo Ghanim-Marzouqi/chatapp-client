@@ -35,7 +35,7 @@ export const reducer = (state, action) => {
     case "SET_MESSAGES":
       return setMessages(action.messages);
     case "ADD_MESSAGE":
-      return addNewMessage(action.message);
+      return addNewMessage(state, action.message);
     default:
       throw new Error();
   }
@@ -59,9 +59,8 @@ const setMessages = (messages) => {
   return (state.messages = messages);
 };
 
-const addNewMessage = (message) => {
-  state.messages.push(message);
-  return state.messages;
+const addNewMessage = (oldMessages, message) => {
+  return [...oldMessages, message];
 };
 
 export default AppContext;
